@@ -6,14 +6,17 @@ import type { ImagePreset } from "../presets";
 type Props = {
   imageSrc: string;
   preset: ImagePreset;
+  sourceWidth: number;
+  sourceHeight: number;
   onCropComplete: (presetId: string, croppedArea: Area) => void;
 };
 
-export function CropPanel({ imageSrc, preset, onCropComplete }: Props) {
+export function CropPanel({ imageSrc, preset, sourceWidth, sourceHeight, onCropComplete }: Props) {
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
 
   const aspect = preset.width / preset.height;
+  const willUpscale = sourceWidth < preset.width || sourceHeight < preset.height;
 
   const handleCropComplete = useCallback(
     (_croppedAreaPercent: Area, croppedAreaPixels: Area) => {
@@ -59,6 +62,14 @@ export function CropPanel({ imageSrc, preset, onCropComplete }: Props) {
           showGrid={false}
         />
       </div>
+
+      {willUpscale && (
+        <div className="border-t border-amber-200 bg-amber-50 px-4 py-2 dark:border-amber-800 dark:bg-amber-950/40">
+          <p className="text-xs text-amber-700 dark:text-amber-400">
+            Source is {sourceWidth} × {sourceHeight} — output will be upscaled
+          </p>
+        </div>
+      )}
 
       <div className="flex items-center gap-3 border-t border-gray-200 px-4 py-3 dark:border-gray-700">
         <span className="text-xs text-gray-500 dark:text-gray-400 shrink-0">

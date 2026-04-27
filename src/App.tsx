@@ -139,6 +139,8 @@ function App() {
                   key={preset.id}
                   imageSrc={imageSrc}
                   preset={preset}
+                  sourceWidth={imageDims?.w ?? 0}
+                  sourceHeight={imageDims?.h ?? 0}
                   onCropComplete={handleCropComplete}
                 />
               ))}
