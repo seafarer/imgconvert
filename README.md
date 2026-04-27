@@ -1,73 +1,56 @@
-# React + TypeScript + Vite
+# Image Crop & Export
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A client-side tool for preparing website images before uploading them to a CMS. Upload a source image, adjust crops for predefined site ratios, and export optimized `.webp` files as a ZIP.
 
-Currently, two official plugins are available:
+## How it works
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. Drop or select a source image (JPEG, PNG, or WebP)
+2. Adjust crop position and zoom for each preset
+3. Click **Export All as ZIP** to download the cropped images
 
-## React Compiler
+Everything runs in the browser — no server, no uploads, no data leaves your machine.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Presets
 
-## Expanding the ESLint configuration
+| Preset   | Dimensions   | Suffix     |
+| -------- | ------------ | ---------- |
+| Hero     | 1600 × 1000  | `-hero`    |
+| Card     | 1200 × 900   | `-card`    |
+| Portrait | 900 × 1100   | `-portrait`|
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Add or modify presets in `src/presets.ts`.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Output
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+For a source file named `classroom photo.jpg`, the export produces:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+classroom-photo-hero.webp
+classroom-photo-card.webp
+classroom-photo-portrait.webp
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Whitespace in filenames is replaced with hyphens. On browsers that don't support WebP canvas export, PNG is used as a fallback.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Tech stack
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- React + Vite + TypeScript
+- Tailwind CSS
+- [react-easy-crop](https://github.com/ValentinH/react-easy-crop) for crop UI
+- Canvas API for rendering crops
+- [JSZip](https://stuk.github.io/jszip/) + [FileSaver.js](https://github.com/nicksavill/FileSaver.js) for bundled download
+
+## Development
+
+```bash
+npm install
+npm run dev
 ```
+
+## Build
+
+```bash
+npm run build
+```
+
+Output goes to `dist/`. Deploy anywhere that serves static files (Vercel, Netlify, etc.).
