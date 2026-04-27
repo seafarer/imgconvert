@@ -115,7 +115,11 @@ function App() {
 
       <main className="mx-auto max-w-6xl px-4 py-8">
         {!imageSrc ? (
-          <div className="flex min-h-[60vh] items-center justify-center">
+          <div className="flex min-h-[60vh] flex-col items-center justify-center gap-6">
+            <p className="max-w-md text-center text-gray-500 dark:text-gray-400">
+              Upload an image to crop it for Hero, Card, and Portrait sizes,
+              then export all three to WebP format.
+            </p>
             <UploadArea onFile={handleFile} />
           </div>
         ) : (
